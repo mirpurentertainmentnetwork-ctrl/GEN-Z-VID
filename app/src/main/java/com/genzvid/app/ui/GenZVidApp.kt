@@ -5,7 +5,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Subscriptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -27,15 +28,16 @@ import com.genzvid.app.ui.screens.SearchScreen
 
 sealed class Screen(val route: String, val title: String, val icon: androidx.compose.ui.graphics.vector.ImageVector) {
     object Feed : Screen("feed", "Home", Icons.Default.Home)
-    object Search : Screen("search", "Search", Icons.Default.Search)
+    object Shorts : Screen("shorts", "Shorts", Icons.Default.PlayArrow)
     object Create : Screen("create", "Create", Icons.Default.Add)
+    object Subscriptions : Screen("subscriptions", "Subs", Icons.Default.Subscriptions)
     object Profile : Screen("profile", "Profile", Icons.Default.Person)
 }
 
 @Composable
 fun GenZVidApp() {
     val navController = rememberNavController()
-    val items = listOf(Screen.Feed, Screen.Search, Screen.Create, Screen.Profile)
+    val items = listOf(Screen.Feed, Screen.Shorts, Screen.Create, Screen.Subscriptions, Screen.Profile)
 
     Scaffold(
         bottomBar = {
@@ -68,8 +70,9 @@ fun GenZVidApp() {
         ) {
             composable("auth") { AuthScreen(onAuthSuccess = { navController.navigate("feed") { popUpTo("auth") { inclusive = true } } }) }
             composable(Screen.Feed.route) { FeedScreen() }
-            composable(Screen.Search.route) { SearchScreen() }
+            composable(Screen.Shorts.route) { SearchScreen() } // placeholder for shorts
             composable(Screen.Create.route) { CreateScreen() }
+            composable(Screen.Subscriptions.route) { ProfileScreen(onLogout = {}) } // placeholder
             composable(Screen.Profile.route) { ProfileScreen(onLogout = { navController.navigate("auth") { popUpTo(0) } }) }
         }
     }
